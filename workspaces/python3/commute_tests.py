@@ -1,12 +1,7 @@
 # coding: utf-8
 from functools import reduce
-from copy import deepcopy
-from io import StringIO
 import base26
 import spaced_symbols
-
-import IPython
-
 
 # given n morphisms, run the object through all of them and ensure it is unchanged afterwards
 def commute_test(obj, *morphisms):
@@ -17,6 +12,7 @@ def commute_test(obj, *morphisms):
             print(g.__name__ + "-->", g(x), end=' ')
             print(" --" + f.__name__ + "-->", end=' ')
             return f(g(x))
+        composition.__name__ = g.__name__
         return composition
 
 
@@ -38,6 +34,6 @@ commute_test([26, 5, 2, 18, 1, 19], base26.numbers_to_letters,
                                     base26.letters_to_numbers )
 
 commute_test('ZEBRAS', base26.letters_to_numbers,
-                spaced_symbols.numbers_to_washers,
-                spaced_symbols.washers_to_numbers,
+               spaced_symbols.numbers_to_washers,
+               spaced_symbols.washers_to_numbers,
                        base26.numbers_to_letters )
