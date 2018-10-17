@@ -3,7 +3,8 @@ import itertools
 def numbers_to_data(numbers, base=26):
     number = 0
     for i, n in enumerate(reversed(numbers)):
-        number += (n * base)**i
+        number += n * (base**i)
+        print(base**i,n,number)
     return number
 
 def data_to_numbers(data, base=26):
@@ -24,6 +25,7 @@ def data_to_numbers(data, base=26):
         digit = int(data / place)
         numbers.insert(1,digit)
         data -= digit * place
+        print(place, digit, data)
     return numbers
 
 def washers_to_data(numbers):

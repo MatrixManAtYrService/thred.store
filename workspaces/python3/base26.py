@@ -11,7 +11,7 @@ def letters_to_numbers(string):
     return numbers
 
 def numbers_to_letters(numbers):
-    letters = []
+    string = ""
     for number in numbers:
-        letters.append(str(chr(number + 64)))
-    return letters
+        string += chr(number + 64)
+    return string
