@@ -1,11 +1,19 @@
 import itertools
 
+# just like an int, except it prints in binary
+# no reason to think base 10 is special in this context
+class Bits(int):
+    def __repr__(self):
+        return '{:b}'.format(self)
+
+    def __string__(self):
+        return '{:b}'.format(self)
+
 def numbers_to_data(numbers, base=26):
     number = 0
     for i, n in enumerate(reversed(numbers)):
         number += n * (base**i)
-        print(base**i,n,number)
-    return number
+    return Bits(number)
 
 def data_to_numbers(data, base=26):
 
@@ -23,14 +31,6 @@ def data_to_numbers(data, base=26):
     numbers = []
     for place in reversed(places):
         digit = int(data / place)
-        numbers.insert(1,digit)
+        numbers.append(digit)
         data -= digit * place
-        print(place, digit, data)
     return numbers
-
-def washers_to_data(numbers):
-    return numbers_to_data(numbers, base=4)
-
-def data_to_washers(data):
-    # most significant bit goes left
-    return data_to_numbers(data, base=4)
