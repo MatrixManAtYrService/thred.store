@@ -1,3 +1,4 @@
+import bip39
 import base26
 import base4
 import bits
@@ -40,6 +41,27 @@ def main():
     equivalent([[1]], base4.washer_segments_to_numbers, [1])
     equivalent([[0,0,0]], base4.washer_segments_to_numbers, [0])
     equivalent([[1], [2], [1,2,2]], base4.washer_segments_to_numbers, [1, 2, 26])
+
+    def base_26_to_offset(letters):
+        return bip39.numbers_to_offsets(base26.letters_to_numbers(letters))
+
+    equivalent('AaAaaAAAAAA', base_26_to_offset, [0])
+    equivalent('ZZZZZZZZZZZ', base_26_to_offset, [2047])
+    equivalent('AAAAAAAAAAAaaaaaaaaaabZZZZZZZZZZY', base_26_to_offset, [0,1,2046])
+
+    def offset_by_0(word):
+        return bip39.offset_by(word, 0)
+
+    def offset_by_1(word):
+        return bip39.offset_by(word, 1)
+
+    def offset_by_2047(word):
+        return bip39.offset_by(word, 2047)
+
+    equivalent('abandon', offset_by_0, 'abandon')
+    equivalent('abandon', offset_by_1, 'ability')
+    equivalent('abandon', offset_by_2047, 'zoo')
+    equivalent('bread', offset_by_2047, 'brave')
 
 if __name__ == "__main__":
     main()

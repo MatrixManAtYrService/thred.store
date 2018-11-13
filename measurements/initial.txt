@@ -1,0 +1,32 @@
+
+
+Experimental batch:
+
+Role    | Name                               | Width (mm) | OD (mm) | ID (mm)
+---     | ---                                | ---        | ---     | ---
+Divider | Fender Washer                      | 1.4        | 25.4    | 5.8
+3       | Flat Washer, SAE 7/8               | 1.2        | 22.2    | 10.5
+2       | Flat Washer, SAE 3/4               | 1.2        | 19.0    | 8.8
+1       | Flat Washer, SAE 3/4               | 1.2        | 15.9    | 7.3
+0       | Flat Washer, SAE #8, Marine Grad e | 1.2        | 11.1    | 4.7
+Frame   | M4 Bolt                            |            |         |
+
+
+First Batch:
+Fastenal.com
+
+Role : sku * ct
+0 : 33071 * 2000
+1 : 71013 * 1200
+2 : 71015 * 630
+3 : 71016 * 660
+D : 71211 * 100
+
+
+kit:
+0 * 125
+1 * 72
+2 * 39
+3 * 41
+D * 16
+B * 7 (2 words each + one for the currency)

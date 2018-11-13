@@ -77,5 +77,16 @@ def main():
                            base26.data_to_numbers,
                            base26.numbers_to_letters )
 
+
+    commute_test('THRED', base26.letters_to_numbers,
+                          base4.numbers_to_washer_segments,
+                          base4.washer_segments_to_numbers,
+                          base26.numbers_to_letters )
+
+    commute_test('STORE', base26.letters_to_numbers,
+                          base4.numbers_to_washer_segments,
+                          base4.washer_segments_to_numbers,
+                          base26.numbers_to_letters )
+
 if __name__ == "__main__":
     main()
