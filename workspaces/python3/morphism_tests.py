@@ -2,6 +2,7 @@ import bip39
 import base26
 import base4
 import bits
+import bip39
 from bits import Bits
 
 def assert_equal(a, b):
@@ -62,6 +63,15 @@ def main():
     equivalent('abandon', offset_by_1, 'ability')
     equivalent('abandon', offset_by_2047, 'zoo')
     equivalent('bread', offset_by_2047, 'brave')
+
+    mnemonic = ['merit', 'average', 'fragile', 'smart', 'end', 'mom',
+                'knock', 'bid', 'era', 'crisp', 'romance', 'grace']
+
+    bitstream = bip39.mnemonic_to_bitstream(mnemonic)
+
+    equivalent(bitstream, bip39.bitstream_to_mnemonic, mnemonic)
+    equivalent(mnemonic, bip39.mnemonic_to_bitstream, bitstream)
+
 
 if __name__ == "__main__":
     main()

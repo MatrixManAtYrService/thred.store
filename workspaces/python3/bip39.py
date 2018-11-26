@@ -1,5 +1,6 @@
 import re
 import bits
+from bitstream import BitStream, ReadError
 
 # the bip39 wordlist
 words = \
@@ -235,8 +236,11 @@ words = \
 # 11 is the lowest g such that 26^g is divisible by 2048
 # that is, AAAAAAAAAAA=0 and ZZZZZZZZZZZ=2047 (mod 2048)
 # this is  nice because given a random input mnemonic, the output
-# mnemonic will be just-as-random.  This is the case for any even base.
-# Contrast this with g=3, where AAA=0, DAT=2047, ZZZ=1191 (mod 2048)
+# mnemonic will be just-as-random.  This is the case for any even base since 2048 = 2^11.
+
+# Contrast this with g=3, where AAA=0, DAT=2047, ZZZ=1191 (mod 2048), this means that slightly more inputs will map between 0 and 1191--biasing the input randomness towards a particular neighbordood
+
+#
 def numbers_to_offsets(numbers, group_by=11, base=26):
     offsets = []
     chunks = [numbers[x:x+group_by] for x in range(0, len(numbers), group_by)]
@@ -253,6 +257,73 @@ def offset_by(it, offset):
     target = (idx + offset) % 2048
     return words[target]
 
-def checksum(words):
+def mnemonic_to_bitstream(mnemonic):
+    stream = BitStream()
+    for word in mnemonic:
+        value = words.index(word)
+        pointer = 0x1
+        for _ in range(11):
+            if pointer & value:
+                stream.write(True, bool)
+            else:
+                stream.write(False, bool)
+            pointer <<= 1
+    return stream
+
+def bitstream_to_mnemonic(stream):
+    mnemonic = []
+    try:
+        while True:
+            value = 0
+            pointer = 0x1
+            for on in stream.read(bool, 11):
+                if on:
+                    value |= pointer
+                pointer <<= 1
+            mnemonic.append(words[value])
+    except ReadError:
+        pass
+    return mnemonic
+
+
+
+
+
+
+
+
+
+def get_input_entropy(mnemonic):
+
+    # how long was the source entropy for this wordlist?
+    # according to https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki#generating-the-mnemonic
+    # CS = ENT / 32
+    # MS = (ENT + CS) / 11
+    # then...
+    # MS = ENT(33/32) / 11
+    # so...
+    # ENT = (352/33) * MS
+
+    entropy_orig_len = (352/33) * ct
+    encoded_data = get_bits(mnemonic)
+    return stream.read(bytes, entropy_orig_len / 8)
+
+
+
+# given a bip39 mnemonic with a bad checksum (due to offset mangling)
+# return a fixed mnemonic
+def fix_checksum(mnemonic):
+
+
+    # start with all 1's
+    entropy = 2**(entropy_orig_len) - 1
+
+    ct = 0
+    for word in mnemonic:
+        entropy &= (words.index(word) >> (ct * 11))
+        ct += 1
+    last = words.index(word)
+
+    entropy_orig_len = (352/33) * ct
 
 
