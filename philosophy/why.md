@@ -238,7 +238,7 @@ In order to remain competative, our monetary infrastructure will need to run 24/
 Otherwise, the costs (in delay-seconds or human-wage-dollars) will have to be offloaded onto users as costs-of-doing-business.
 We'll also need to drastically reduce occurrances of "identity theft" so that whoever bears the cost of fraudlent activity has to bear less of it (because these costs also trickle down).
 For the former, we'll need to get more familliar with code.
-For the latter, we'll need to adopt something like asymetric cryptography for identifying payers.
+For the latter, we'll need to stop using semi-secrets (like an ssn) to identify ourselves.
 
 The best way to learn to code is to have a computational problem that you need to solve.
 Whether you're encoding or decoding a secret, working with thred.store means solving a series of computational problems.
@@ -254,7 +254,6 @@ During that time, students study how numbers are represented in various bases (t
 As students come up with their hidden words, the teacher can know that those students are ready to move on.
 This is likely the first lesson, and it wouldn't require that the students write any code, but later lessons could involve the making and breaking of rudimentary cryptosystems.
 It takes very little code to achieve these tasks, and I believe students would quickly see the value in automating their work.
-
 
 thred.store is connected to a wealth of mathematical concepts, and although mastery of these concepts is not needed for basic usage, one does not have to go too far afield to devise hands-on excercises that can help teach them.
 Here are some examples:
