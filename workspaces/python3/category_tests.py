@@ -1,7 +1,7 @@
 from functools import reduce
 from morphism_tests import assert_equal
-import base26
-import base4
+import alphanum
+import washers
 
 # just pretty printing stuff
 class Step:
@@ -61,32 +61,30 @@ def commute_test(obj, *morphisms):
 
 def main():
 
-    # ZEBRAS --letters_to_numbers--> [26, 5, 2, 18, 1, 19] --numbers_to_letters--> ZEBRAS
-    commute_test('ZEBRAS', base26.letters_to_numbers,
-                           base26.numbers_to_letters )
+    # ZEBRAS --base64_to_numbers--> [26, 5, 2, 18, 1, 19] --numbers_to_base64--> ZEBRAS
+    commute_test('ZEBRAS', alphanum.base64_to_numbers,
+                           alphanum.numbers_to_base64 )
 
-    commute_test('ZEBRAS', base26.letters_to_numbers,
-                           base4.numbers_to_washer_segments,
-                           base4.washer_segments_to_numbers,
-                           base26.numbers_to_letters )
+    commute_test('ZEBRAS', alphanum.base64_to_data,
+                           washers.data_to_base4 )
 
-    commute_test('ZEBRAS', base26.letters_to_numbers,
-                           base26.numbers_to_data,
-                           base4.data_to_washers,
-                           base4.washers_to_data,
-                           base26.data_to_numbers,
-                           base26.numbers_to_letters )
+    commute_test('ZEBRAS', alphanum.base64_to_numbers,
+                           alphanum.numbers_to_data,
+                           washers.data_to_base4,
+                           washers.base4_to_data,
+                           alphanum.data_to_numbers,
+                           alphanum.numbers_to_base64 )
 
 
-    commute_test('THRED', base26.letters_to_numbers,
-                          base4.numbers_to_washer_segments,
-                          base4.washer_segments_to_numbers,
-                          base26.numbers_to_letters )
+    commute_test('THRED', alphanum.base64_to_data,
+                          washers.data_to_base4,
+                          washers.base4_to_data,
+                          alphanum.data_to_base64 )
 
-    commute_test('STORE', base26.letters_to_numbers,
-                          base4.numbers_to_washer_segments,
-                          base4.washer_segments_to_numbers,
-                          base26.numbers_to_letters )
+    commute_test('STORE', alphanum.base64_to_data,
+                          washers.data_to_base4,
+                          washers.base4_to_data,
+                          alphanum.data_to_base64 )
 
 if __name__ == "__main__":
     main()

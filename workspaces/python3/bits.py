@@ -6,7 +6,7 @@ class Bits(int):
     def __repr__(self):
         return '{:b}'.format(self)
 
-    def __string__(self):
+    def __str__(self):
         return '{:b}'.format(self)
 
 def numbers_to_data(numbers, base=26):

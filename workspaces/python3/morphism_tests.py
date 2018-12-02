@@ -1,9 +1,10 @@
 import bip39
-import base26
-import base4
+import alphanum
+import washers
 import bits
 import bip39
 from bits import Bits
+from copy import deepcopy
 
 def assert_equal(a, b):
     if a == b:
@@ -23,32 +24,37 @@ def base16(func):
     return func2
 
 def main():
-    equivalent(0, base26.data_to_numbers, [])
-    equivalent(1, base26.data_to_numbers, [1])
-    equivalent(27, base26.data_to_numbers, [1,1])
+    equivalent([32], alphanum.numbers_to_data, bits.Bits(32))
+
+    equivalent(0, alphanum.data_to_numbers, [])
+    equivalent(1, alphanum.data_to_numbers, [1])
+    equivalent(65, alphanum.data_to_numbers, [1,1])
+
 
     equivalent(1000, base16(bits.data_to_numbers), [3,14,8])
 
-    equivalent(5, base4.data_to_washers, [1,1])
-    equivalent(18, base4.data_to_washers, [1,0,2])
-    equivalent(26, base4.data_to_washers, [1,2,2])
+    equivalent(5, washers.data_to_base4, "11")
+    equivalent(18, washers.data_to_base4, "102")
+    equivalent(26, washers.data_to_base4, "122")
 
-    equivalent([1,1], base4.washers_to_data, 5)
-    equivalent([1,0,2], base4.washers_to_data, 18)
-    equivalent([1,2,2], base4.washers_to_data, 26)
+    equivalent("11", washers.base4_to_data, 5)
+    equivalent("102", washers.base4_to_data, 18)
+    equivalent("122", washers.base4_to_data, 26)
 
     equivalent(Bits(0b11001100), base16(bits.data_to_numbers), [12, 12])
 
-    equivalent([[1]], base4.washer_segments_to_numbers, [1])
-    equivalent([[0,0,0]], base4.washer_segments_to_numbers, [0])
-    equivalent([[1], [2], [1,2,2]], base4.washer_segments_to_numbers, [1, 2, 26])
+    equivalent("1", washers.base4_to_numbers, [1])
+    equivalent("000", washers.base4_to_numbers, [0, 0, 0])
 
-    def base_26_to_offset(letters):
-        return bip39.numbers_to_offsets(base26.letters_to_numbers(letters))
+    def base_64_to_offset(letters):
+        return bip39.numbers_to_offsets(alphanum.base64_to_numbers(letters))
 
-    equivalent('AaAaaAAAAAA', base_26_to_offset, [0])
-    equivalent('ZZZZZZZZZZZ', base_26_to_offset, [2047])
-    equivalent('AAAAAAAAAAAaaaaaaaaaabZZZZZZZZZZY', base_26_to_offset, [0,1,2046])
+    equivalent('AAAAAAAAAA', base_64_to_offset, [0])
+    equivalent('AAAAAAAAAB', base_64_to_offset, [1])
+    equivalent('AAAAAAAAABAAAAAAAAA', base_64_to_offset, [1])
+    equivalent('AAAAAAAAABAAAAAAAAAC', base_64_to_offset, [1, 2])
+    equivalent('//////////', base_64_to_offset, [2047])
+    equivalent('///////////////////+', base_64_to_offset, [2047, 2046])
 
     def offset_by_0(word):
         return bip39.offset_by(word, 0)
@@ -69,8 +75,8 @@ def main():
 
     bitstream = bip39.mnemonic_to_bitstream(mnemonic)
 
-    equivalent(bitstream, bip39.bitstream_to_mnemonic, mnemonic)
-    equivalent(mnemonic, bip39.mnemonic_to_bitstream, bitstream)
+    equivalent(deepcopy(bitstream), bip39.bitstream_to_mnemonic, mnemonic)
+    equivalent(mnemonic, bip39.mnemonic_to_bitstream, deepcopy(bitstream))
 
 
 if __name__ == "__main__":

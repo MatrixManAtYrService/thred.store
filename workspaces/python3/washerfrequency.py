@@ -1,6 +1,6 @@
 import re
-import base26
-import base4
+import alphanum
+import washers
 import json
 from sortedcontainers import SortedDict
 
@@ -9,7 +9,7 @@ What a tangle
 What a strangling knot to be caught in
 To be exiled here
 To be stuck in Berlin with Vienna so near
-Yet so far from the Emperor’s ear
+Yet so far from the Emperor's ear
 What a strange and impossible sum
 To be old while to still be so young
 To have sung before speaking a word
@@ -34,7 +34,7 @@ To play the etudes and the suites
 The nocturnes and The Fantaisie
 To master the sonatas, minuets, and symphonies
 To seek the truth fits and starts
-To strike the middle F like it’s an arrow through the heart
+To strike the middle F like it's an arrow through the heart
 To wing the right hand like a dove (the peaceful flutter of a dove)
 And with left a violent shove (some moments will demand a shove)
 To needle gently yet relentless with a steady foot upon the pedal
@@ -48,7 +48,7 @@ To pose a question with a pinky on a key
 To flee, to fight, to bleed
 To float in air
 Nothing solid underneath
-To rap those heavy knuckles on the gate to heaven til there’s nothing to
+To rap those heavy knuckles on the gate to heaven til there's nothing to
 Achieve, but—
 To go retrieve the length of cable hidden in the cabinet
 To metamorphasize the twisted rope unto an alphabet
@@ -59,9 +59,9 @@ To hug the wretched root around the fibers suffocatingly
 To wrap again to wrap again to give the coil seven loops
 To penetrate the yawning hoop
 To tug the loose appendage through
-To yank the knot until it’s ready for the job it’s got to do
+To yank the knot until it's ready for the job it's got to do
 To toss the braid above the ceiling beam and to affix the noose
-To bid adieu to all of you until there’s nothing left to do but
+To bid adieu to all of you until there's nothing left to do but
 Climb the chair
 To cinch the collar
 Find the edge
@@ -70,12 +70,12 @@ To step into the air
 --
 
 Arthur stepped off, yeah he stepped offa the chair
-Couldn’t weigh a hundred forty pounds
+Couldn't weigh a hundred forty pounds
 And the rope snapped, yeah, the rope snapped
 And then Arthur found himself looking up from the ground
 Looking up, looking up, found things looking up
 Looking up, looking not so down, no not so down
-No knots don’t have to stay that way
+No knots don't have to stay that way
 No, not so tightly wound
 
 What a lovely thing it is to fail
@@ -86,12 +86,12 @@ And then my father walked down eighth and fiftyseventh street to
 
 Carnegie Hall, yeah it was Carnegie Hall
 The show was past sold out for weeks
-But they said “if you don’t mind, if you don’t mind sitting on stage
-Sometimes we release a couple seats”
-Twenty feet, twenty feet, yeah my dad’s twenty three
+But they said "if you don't mind, if you don't mind sitting on stage
+Sometimes we release a couple seats"
+Twenty feet, twenty feet, yeah my dad's twenty three
 Twenty feet from the hands on the keys
-Yeah, the hands on the keys of a man with the hands that almost didn’t exist
-That almost didn’t exist to see
+Yeah, the hands on the keys of a man with the hands that almost didn't exist
+That almost didn't exist to see
 '''
 
 sample_b = '''
@@ -316,14 +316,14 @@ def frequency(sample):
     letters = alpha_only(sample)
 
     # encode to washers
-    l2n = base26.letters_to_numbers
-    n2w = base4.numbers_to_washer_segments
-    washers = n2w(l2n(letters))
+    l2n = alphanum.base64_to_data
+    n2w = washers.data_to_base4
+    washer_numbers = n2w(l2n(letters))
 
     freq = SortedDict()
 
-    max_width = max(map(lambda x : len(x), washers))
-    for segment in washers:
+    max_width = max(map(lambda x : len(x), washer_numbers))
+    for segment in washer_numbers:
 
         # normalize widths
         width = len(segment)

@@ -233,15 +233,22 @@ words = \
 'wrestle',  'wrist',    'write',    'wrong',    'yard',     'year',     'yellow',   'you',      'young',
 'youth',    'zebra',    'zero',     'zone',     'zoo']
 
-# 11 is the lowest g such that 26^g is divisible by 2048
-# that is, AAAAAAAAAAA=0 and ZZZZZZZZZZZ=2047 (mod 2048)
-# this is  nice because given a random input mnemonic, the output
-# mnemonic will be just-as-random.  This is the case for any even base since 2048 = 2^11.
+# given a random input mnemonic, we want to avoid biasing the output mnemonic,
+# so the group_by parameter should be such that base**group_by % = 0 (mod 2048).
+# Otherwise we may create sweet spots for seed guessing.
+# for base 64, any value greater than 3 will do.
 
-# Contrast this with g=3, where AAA=0, DAT=2047, ZZZ=1191 (mod 2048), this means that slightly more inputs will map between 0 and 1191--biasing the input randomness towards a particular neighbordood
+# if base**group_by = 2048 then input<->offset, and offset<->output both map one-to-one
+# this means that having any two allows you to derive the third.
+# in most cases this is not desirable, so greater group_by's should be used.
+
+# For example, consider a known output and input.
+# If group_by = 5 and base = 64 then any given offset will have 4096 possible
+# hop-key-segments that could explain it since 64**5 / 2048 = 4096
 
 #
-def numbers_to_offsets(numbers, group_by=11, base=26):
+def numbers_to_offsets(numbers, group_by=10, base=64):
+    print(numbers)
     offsets = []
     chunks = [numbers[x:x+group_by] for x in range(0, len(numbers), group_by)]
     for chunk in chunks:
@@ -268,6 +275,7 @@ def mnemonic_to_bitstream(mnemonic):
             else:
                 stream.write(False, bool)
             pointer <<= 1
+
     return stream
 
 def bitstream_to_mnemonic(stream):
