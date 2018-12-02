@@ -11,6 +11,7 @@ def assert_equal(a, b):
         print("[SUCCESS]")
     else:
         print("[FAIL: {} != {}]".format(a, b))
+    print()
 
 def equivalent(a, morphism, b):
     a_image = morphism(a)

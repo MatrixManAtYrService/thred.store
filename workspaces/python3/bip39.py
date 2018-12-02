@@ -1,5 +1,7 @@
 import re
 import bits
+from copy import deepcopy
+from hashlib import sha256
 from bitstream import BitStream, ReadError
 
 # the bip39 wordlist
@@ -293,15 +295,10 @@ def bitstream_to_mnemonic(stream):
         pass
     return mnemonic
 
+# given a mnemonic, separate the payload from the checksum
+def split(mnemonic):
 
-
-
-
-
-
-
-
-def get_input_entropy(mnemonic):
+    final_bits = mnemonic_to_bitstream(mnemonic)
 
     # how long was the source entropy for this wordlist?
     # according to https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki#generating-the-mnemonic
@@ -311,27 +308,71 @@ def get_input_entropy(mnemonic):
     # MS = ENT(33/32) / 11
     # so...
     # ENT = (352/33) * MS
+    payload_len = (352/33) * len(mnemonic)
 
-    entropy_orig_len = (352/33) * ct
-    encoded_data = get_bits(mnemonic)
-    return stream.read(bytes, entropy_orig_len / 8)
+    if payload_len != int(payload_len):
+        raise ValueError("calculated {} bits of initial entropy".format(entropy_orig_len))
+    payload_len = int(payload_len)
 
+    # transfer bits until we reach the end of the source entropy
+    # all remaining bits will be the checksum
+    payload = BitStream()
+    for bit in final_bits.read(bool, payload_len):
+        payload.write(bit)
+
+    checksum = deepcopy(final_bits)
+    return [payload, checksum]
+
+def as_bytes(bitstream):
+
+    # don't modify the original
+    pbits = deepcopy(bitstream)
+
+    # this was a guess, I think it's a bad one:
+    # pad zeros to byte boundary
+    for _ in range(8 - (len(pbits) % 8)):
+        pbits.write(False)
+
+    return pbits.read(bytes)
+
+
+def checksum_is_good(mnemonic):
+
+    payload, checksum = split(mnemonic)
+
+    # hash the payload
+    hasher = sha256()
+    hasher.update(as_bytes(payload))
+    long_checksum = BitStream(hasher.digest())
+
+    new_checksum = BitStream()
+    for bit in long_checksum.read(bool, len(payload) / 32):
+        new_checksum.write(bit)
+
+    print(checksum)
+    print(new_checksum)
+    return checksum == new_checksum
 
 
 # given a bip39 mnemonic with a bad checksum (due to offset mangling)
-# return a fixed mnemonic
+# return the "same" mnemonic, except with a fixed checksum
 def fix_checksum(mnemonic):
 
+    payload, checksum = split(mnemonic)
 
-    # start with all 1's
-    entropy = 2**(entropy_orig_len) - 1
+    # hash the payload
+    hasher = sha256()
+    hasher.update(as_bytes(payload))
+    long_checksum = BitStream(hasher.digest())
 
-    ct = 0
-    for word in mnemonic:
-        entropy &= (words.index(word) >> (ct * 11))
-        ct += 1
-    last = words.index(word)
+    # append bits from the beginning of the SHA256 to the end of the starting entropy
+    for bit in long_checksum.read(bool, len(payload) / 32):
+        payload.write(bit)
 
-    entropy_orig_len = (352/33) * ct
+    return bitstream_to_mnemonic(payload)
+
+
+
+
 
 
