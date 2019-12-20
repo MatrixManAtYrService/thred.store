@@ -181,3 +181,8 @@ Using dice to choose pages numbers from a dictionary, and then to choose words f
 By restricting to 6-letter and longer words, I believe I have reduced the likelihood that a single character error will fail to be identified as an error (and subsequently corrected).
 
 There is a weakness to using character-wise encoding here.  It is similar to the weakness described above regarding true one-time-pads vs excerpts from books
+
+Note for later: https://scilogs.spektrum.de/hlf/mental-cryptography-and-good-passwords/
+Keystream is XOR-stacked keys, in four char rounds (to ensure conversion to bytes later)
+This helps find errors because cipher errors will appear in four character chunks while key errors will be character wise
+
