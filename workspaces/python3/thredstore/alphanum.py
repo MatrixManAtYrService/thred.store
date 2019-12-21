@@ -11,7 +11,10 @@ def numbers_to_data(number_list):
     return bits.numbers_to_data(number_list, base=64)
 
 def data_to_numbers(number_list):
-    return bits.data_to_numbers(number_list, base=64)
+    if number_list:
+        return bits.data_to_numbers(number_list, base=64)
+    else:
+        return [0]
 
 def base64_to_numbers(string):
     number_list = []
