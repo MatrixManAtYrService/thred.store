@@ -36,7 +36,7 @@ for char in symbols:
 
     symbol_meta[char]['back']['center']['bottom'] = [
                  { "val" : "unlocked_padlock", "background" : purple },
-        "=",     { "val" : "key",              "background" : teal },
+        "=",     { "val" : "locked_padlock", "background" : teal },
         "-",     { "val" : char,   "color" : orange, "subscript" : "key" }]
 
     symbol_meta[char]['back']['left_column'] = { "background" : purple }
