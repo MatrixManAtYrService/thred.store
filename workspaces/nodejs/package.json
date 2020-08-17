@@ -1,0 +1,12 @@
+{
+  "name": "co-tree",
+  "version": "1.0.0",
+  "description": "Generate an svg representing a conducto pipeline tree",
+  "author": "Matt Rixman",
+  "dependencies": {
+    "d3": "^5.16.0",
+    "d3-node": "^v2.2.2",
+    "font-list": "^1.2.11",
+    "string-pixel-width": "^1.10.0"
+  }
+}
